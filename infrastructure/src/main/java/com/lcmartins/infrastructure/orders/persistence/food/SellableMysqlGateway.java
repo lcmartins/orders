@@ -23,7 +23,7 @@ public class SellableMysqlGateway implements SellableGateway<FoodDBEntity> {
 
     @Override
     public BigDecimal getMininumOrderValue() {
-        //TODO: pluge it to a table with configurations or chante to get value from other source
+        //TODO: pluge it to a table with configurations or chante to get value from other source, fazer entity T ter um campo com valor minimo
         return BigDecimal.valueOf(100);
     }
 }
