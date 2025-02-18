@@ -17,11 +17,13 @@ public class SellableMysqlGateway implements SellableGateway<FoodDBEntity> {
 
     @Override
     public List<FoodDBEntity> getItemsByIds(List<String> ids) {
+        //TODO remover FoodDBEntity e receber T
         return foodMysqlRepository.findAllById(ids);
     }
 
     @Override
     public BigDecimal getMininumOrderValue() {
+        //TODO: pluge it to a table with configurations or chante to get value from other source
         return BigDecimal.valueOf(100);
     }
 }
