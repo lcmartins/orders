@@ -1,0 +1,24 @@
+server:
+  port: ${PORT:8081}
+
+spring:
+
+  application:
+    name: food
+
+  datasource:
+    url: "jdbc:mysql://${DB_HOST:localhost}:3308/orders?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC"
+    username: root
+    password: admin123
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    generate-ddl: false
+    show-sql: true
+
+  h2:
+    console.enabled: true
+
+  jackson:
+    property-naming-strategy: SNAKE_CASE

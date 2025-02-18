@@ -1,0 +1,21 @@
+plugins {
+    id 'java'
+}
+
+group = 'com.lcmartins.restaurant.orders'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation(project(":domain"))
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation("org.mockito:mockito-junit-jupiter:5.14.1")
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+test {
+    useJUnitPlatform()
+}

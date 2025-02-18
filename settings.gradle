@@ -1,0 +1,5 @@
+rootProject.name = 'orders'
+include 'domain'
+include 'application'
+include 'infrastructure'
+
