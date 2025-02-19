@@ -11,7 +11,6 @@ import com.lcmartins.domain.entities.order.OrderEntityId;
 import com.lcmartins.domain.entities.order.OrderItem;
 import com.lcmartins.domain.entities.order.TransientOrderItem;
 import com.lcmartins.domain.exceptions.DomainException;
-import com.lcmartins.domain.gateways.SellableGateway;
 import com.lcmartins.domain.gateways.OrderGateway;
 import com.lcmartins.domain.general.Price;
 import org.junit.jupiter.api.Test;
@@ -38,8 +37,6 @@ public class DefaultOrderFoodUseCaseTest {
     @Mock
     private OrderGateway<Food> orderGateway;
 
-    @Mock
-    private SellableGateway<Food> sellableGateway;
 
     @Test
     public void givenAValidFood_whenCallsToCreateOrder_thenShouldCrateOrderAsRequired() {
@@ -75,8 +72,8 @@ public class DefaultOrderFoodUseCaseTest {
         newOrderDomainItems.add(new OrderItem<>(orderingFood2, orderingFood2.getName(), 3));
 
 
-        when(sellableGateway.getItemsByIds(anyList())).thenReturn(List.of(orderingFood1, orderingFood2));
-        when(sellableGateway.getMininumOrderValue()).thenReturn(BigDecimal.valueOf(15000));
+        when(orderGateway.getItemsByIds(anyList())).thenReturn(List.of(orderingFood1, orderingFood2));
+        when(orderGateway.getMininumOrderValue()).thenReturn(BigDecimal.valueOf(15000));
         when(orderGateway.create(any())).thenReturn(
                 new Order<>(newOrderDomainItems,
                         Customer.with(1L),
@@ -86,7 +83,7 @@ public class DefaultOrderFoodUseCaseTest {
         );
         final var output = useCase.execute(createOrderCommand);
 
-        verify(sellableGateway, times(1)).getItemsByIds(any());
+        verify(orderGateway, times(1)).getItemsByIds(any());
         verify(orderGateway, times(1)).create(any());
         assertNotNull(output.id());
         assertEquals(2, output.items().size());
@@ -123,8 +120,8 @@ public class DefaultOrderFoodUseCaseTest {
                         TransientOrderItem.with("1L", 2))
         );
 
-        when(sellableGateway.getItemsByIds(anyList())).thenReturn(List.of(orderingFood1, orderingFood2));
-        when(sellableGateway.getMininumOrderValue()).thenReturn(BigDecimal.valueOf(20000));
+        when(orderGateway.getItemsByIds(anyList())).thenReturn(List.of(orderingFood1, orderingFood2));
+        when(orderGateway.getMininumOrderValue()).thenReturn(BigDecimal.valueOf(20000));
 
         final var exception = assertThrows(DomainException.class, () -> useCase.execute(createOrderCommand));
 
