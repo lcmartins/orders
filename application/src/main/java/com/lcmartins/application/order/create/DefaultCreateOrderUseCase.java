@@ -22,26 +22,25 @@ public class DefaultCreateOrderUseCase<T extends Sellable> extends BaseCreateOrd
     @Override
     public OrderOutput execute(CreateOrderCommand command) {
         final List<T> domainItems = orderGateway.getItemsByIds(command.itemsIdList());
-        final var incommingOrderItems = fromTransient(command.items(), domainItems);
-        final var order = new Order<>(incommingOrderItems, Customer.with(command.customerId()), orderGateway.getMininumOrderValue(), null);
+        final var orderItems = fromTransient(command.items(), domainItems);
+        final var order = new Order<>(orderItems, Customer.with(command.customerId()), orderGateway.getMininumOrderValue(), null);
         order.validate(new ThrowsErrorValidatorHandler());
         final var createdOrder = orderGateway.create(order);
         return OrderOutput.with(createdOrder);
     }
 
-
-    public List<OrderItem<T>> fromTransient(List<TransientOrderItem> incomingOrderItems, List<T> domainItems) throws DomainException {
+    public List<OrderItem<T>> fromTransient(List<TransientOrderItem> transientOrderItems, List<T> domainItems) {
         List<OrderItem<T>> newOrderDomainItems = new ArrayList<>();
-        for (T item : domainItems) {
-            Integer quantity = incomingOrderItems
+        domainItems.forEach(domainOrderItem -> {
+            Integer quantity = transientOrderItems
                     .stream()
-                    .filter(orderItemDTO -> orderItemDTO.id().equals(item.getId().getValue()))
+                    .filter(transientOrderItem -> transientOrderItem.id().equals(domainOrderItem.getId().getValue()))
                     .map(TransientOrderItem::quantity)
                     .reduce(0, Integer::sum);
 
-            OrderItem<T> orderItem = new OrderItem<>(item, item.getName(), quantity);
+            OrderItem<T> orderItem = new OrderItem<>(domainOrderItem, domainOrderItem.getName(), quantity);
             newOrderDomainItems.add(orderItem);
-        }
+        });
         return newOrderDomainItems;
     }
 }
