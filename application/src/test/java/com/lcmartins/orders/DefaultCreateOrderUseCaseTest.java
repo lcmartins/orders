@@ -68,8 +68,8 @@ public class DefaultCreateOrderUseCaseTest {
                         TransientOrderItem.with("1L", 2))
         );
         List<OrderItem<Food>> newOrderDomainItems = new ArrayList<>();
-        newOrderDomainItems.add(new OrderItem<>(orderingFood1, orderingFood1.getName(), 12));
-        newOrderDomainItems.add(new OrderItem<>(orderingFood2, orderingFood2.getName(), 3));
+        newOrderDomainItems.add(new OrderItem<>(orderingFood1, 12));
+        newOrderDomainItems.add(new OrderItem<>(orderingFood2, 3));
 
 
         when(orderGateway.getItemsByIds(anyList())).thenReturn(List.of(orderingFood1, orderingFood2));

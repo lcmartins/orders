@@ -71,6 +71,10 @@ public class Order<T extends Sellable> extends DomainEntity {
         return items;
     }
 
+    public OrderItem<? extends Sellable> getFirst() {
+        return this.getItems().get(0);
+    }
+
     public Price getTotal() {
         return total;
     }

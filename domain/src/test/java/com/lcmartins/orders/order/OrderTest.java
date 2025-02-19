@@ -39,18 +39,17 @@ public class OrderTest {
         final List<Ingredient> expectedIngredientItem2 = new ArrayList<>();
         final var expectedTotal2 = BigDecimal.valueOf(expectedQuantityToBuy).multiply(expectedPriceSecondItem);
         expectedIngredientItem2.add(Ingredient.with(expectedNameSecondItem, expectedQuantityInStock));
-        Food food2 = Food.with(expectedNameFirstItem, expectedPriceSecondItem, expectedIngredientItem2);
+        Food food2 = Food.with(expectedNameSecondItem, expectedPriceSecondItem, expectedIngredientItem2);
 
         final Order<Food> order = new Order<>(
                 new OrderItem<>(
                         food,
-                        expectedNameFirstItem,
                         10),
                 Customer.with(expectedCustomerId),
                 null,
                 BigDecimal.ONE
         );
-        order.add(new OrderItem<>(food2, expectedNameSecondItem, 10));
+        order.add(new OrderItem<>(food2, 10));
 
         assertNotNull(order);
         assertEquals(expectedTotal.add(expectedTotal2), order.getRawTotal());
@@ -80,17 +79,16 @@ public class OrderTest {
         final Order<Food> order = new Order<>(
                 new OrderItem<>(
                         hamburger,
-                        expectedName,
                         10),
                 Customer.with(expectedCustomerId),
                 null,
                 BigDecimal.ONE
         );
-        order.add(new OrderItem<>(hamburger, expectedName, 10));
+        order.add(new OrderItem<>(hamburger, 10));
         assertNotNull(order);
         assertEquals(expectedTotal, order.getRawTotal());
-        assertEquals(expectedName, order.getItems().getFirst().getName());
-        assertEquals(expectedPrice, order.getItems().getFirst().getItem().getPrice().getValue());
+        assertEquals(expectedName, order.getFirst().getName());
+        assertEquals(expectedPrice, order.getFirst().getItem().getPrice().getValue());
         assertEquals(expectedCustomerId, order.getCustomer().id());
         assertNull(hamburger.getId());
     }
@@ -112,17 +110,16 @@ public class OrderTest {
         final Order<Food> order = new Order<>(
                 new OrderItem<>(
                         hamburger,
-                        expectedName,
                         10),
                 Customer.with(expectedCustomerId),
                 null,
                 BigDecimal.ONE
         );
-        order.add(new OrderItem<>(hamburger, expectedName, 10));
+        order.add(new OrderItem<>(hamburger, 10));
         assertNotNull(order);
         assertEquals(expectedTotal, order.getRawTotal());
-        assertEquals(expectedName, order.getItems().getFirst().getName());
-        assertEquals(expectedPrice, order.getItems().getFirst().getItem().getPrice().getValue());
+        assertEquals(expectedName, order.getFirst().getName());
+        assertEquals(expectedPrice, order.getFirst().getItem().getPrice().getValue());
         assertEquals(expectedCustomerId, order.getCustomer().id());
         assertEquals(expectedId.getValue(), hamburger.getId().getValue());
     }
@@ -142,13 +139,12 @@ public class OrderTest {
         final Order<Food> order = new Order<>(
                 new OrderItem<>(
                         hamburger,
-                        expectedName,
                         10),
                 Customer.with(expectedCustomerId),
                 null,
                 BigDecimal.valueOf(10000L)
         );
-        order.add(new OrderItem<>(hamburger, expectedName, 10));
+        order.add(new OrderItem<>(hamburger, 10));
         final var expectedException = assertThrows(DomainException.class, () -> order.validate(new ThrowsErrorValidatorHandler()));
 
         assertNotNull(order);
