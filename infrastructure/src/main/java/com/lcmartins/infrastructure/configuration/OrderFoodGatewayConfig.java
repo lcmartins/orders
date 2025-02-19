@@ -2,7 +2,7 @@ package com.lcmartins.infrastructure.configuration;
 
 import com.lcmartins.domain.gateways.OrderGateway;
 import com.lcmartins.infrastructure.orders.persistence.food.FoodDBEntity;
-import com.lcmartins.infrastructure.orders.persistence.order.OrderMysqlGateway;
+import com.lcmartins.infrastructure.orders.persistence.OrderMysqlGateway;
 import com.lcmartins.infrastructure.orders.persistence.order.OrderMysqlRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

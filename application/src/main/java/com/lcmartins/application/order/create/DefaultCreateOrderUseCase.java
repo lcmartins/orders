@@ -5,21 +5,19 @@ import com.lcmartins.domain.entities.order.Order;
 import com.lcmartins.domain.entities.order.OrderItem;
 import com.lcmartins.domain.entities.order.TransientOrderItem;
 import com.lcmartins.domain.exceptions.DomainException;
-import com.lcmartins.domain.gateways.SellableGateway;
 import com.lcmartins.domain.gateways.OrderGateway;
 import com.lcmartins.domain.general.Sellable;
 import com.lcmartins.domain.validators.ThrowsErrorValidatorHandler;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 public class DefaultCreateOrderUseCase<T extends Sellable> extends BaseCreateOrderUseCase {
     private final OrderGateway<T> orderGateway;
-    private final SellableGateway<T> sellableGateway;
 
-    public DefaultCreateOrderUseCase(OrderGateway<T> orderGateway, SellableGateway<T> sellableGateway) {
+    public DefaultCreateOrderUseCase(OrderGateway<T> orderGateway) {
         this.orderGateway = orderGateway;
-        this.sellableGateway = sellableGateway;
     }
 
 
@@ -40,9 +38,9 @@ public class DefaultCreateOrderUseCase<T extends Sellable> extends BaseCreateOrd
 
     @Override
     public OrderOutput execute(CreateOrderCommand command) {
-        final List<T> foods = sellableGateway.getItemsByIds(command.itemsIdList());
+        final List<T> foods = orderGateway.getItemsByIds(command.itemsIdList());
         final var orderItems = fromTransient(command.items(), foods);
-        final var order = new Order<>(orderItems, Customer.with(command.customerId()), sellableGateway.getMininumOrderValue(), null);
+        final var order = new Order<>(orderItems, Customer.with(command.customerId()), orderGateway.getMininumOrderValue(), null);
         order.validate(new ThrowsErrorValidatorHandler());
         final var createdOrder = orderGateway.create(order);
         return OrderOutput.with(createdOrder);

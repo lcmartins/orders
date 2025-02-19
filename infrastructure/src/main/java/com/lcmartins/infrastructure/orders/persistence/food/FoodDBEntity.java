@@ -15,10 +15,13 @@ import java.util.Objects;
 @Table(name = "tbl_food")
 public class FoodDBEntity extends Sellable {
     @Id
+    @Column(name = "id", nullable = false)
     private String id;
 
+    @Column(name = "name", nullable = false)
     private String name;
 
+    @Column(name = "price", nullable = false)
     private BigDecimal price;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)

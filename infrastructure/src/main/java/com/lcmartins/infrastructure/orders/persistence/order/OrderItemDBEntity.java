@@ -14,9 +14,7 @@ import java.util.UUID;
 public class OrderItemDBEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @JdbcType(VarcharJdbcType.class)
-    private UUID Id;
+    private String id;
 
     @Column(name = "item_name", nullable = false)
     private String itemName;
@@ -27,34 +25,29 @@ public class OrderItemDBEntity {
     @Column(name = "created_time", nullable = false)
     private Instant createdTime;
 
+    @Column(name = "quantity")
+    private Integer quantity;
+
+
+    @Column(name = "total")
+    private BigDecimal total;
+
     public OrderItemDBEntity() {
     }
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "order_id")
     private OrderDBEntity orderDBEntity;
 
-    public UUID getID() {
-        return Id;
-    }
 
-    public String getFoodName() {
-        return itemName;
-    }
-
-    public BigDecimal getFoodPrice() {
-        return itemPrice;
-    }
-
-    public OrderDBEntity getOrderEntity() {
-        return orderDBEntity;
-    }
-
-    public OrderItemDBEntity(String oItemName, BigDecimal oItemPrice, OrderDBEntity oOrderDBEntity) {
-        itemName = oItemName;
-        itemPrice = oItemPrice;
-        orderDBEntity = oOrderDBEntity;
+    public OrderItemDBEntity(String iItemName, BigDecimal iItemPrice, Integer iQuantity, OrderDBEntity iOrderDBEntity) {
+        id = UUID.randomUUID().toString();
+        itemName = iItemName;
+        itemPrice = iItemPrice;
+        orderDBEntity = iOrderDBEntity;
         createdTime = Instant.now();
+        quantity = iQuantity;
+        total = BigDecimal.valueOf(iQuantity).multiply(itemPrice);
     }
 
     @Override
@@ -62,11 +55,11 @@ public class OrderItemDBEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         OrderItemDBEntity orderItemDBEntity = (OrderItemDBEntity) o;
-        return Objects.equals(Id, orderItemDBEntity.Id);
+        return Objects.equals(id, orderItemDBEntity.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(Id, itemName);
+        return Objects.hash(id, itemName);
     }
 }
