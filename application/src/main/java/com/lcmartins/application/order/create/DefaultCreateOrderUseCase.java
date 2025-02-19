@@ -4,7 +4,6 @@ import com.lcmartins.domain.entities.customer.Customer;
 import com.lcmartins.domain.entities.order.Order;
 import com.lcmartins.domain.entities.order.OrderItem;
 import com.lcmartins.domain.entities.order.TransientOrderItem;
-import com.lcmartins.domain.exceptions.DomainException;
 import com.lcmartins.domain.gateways.OrderGateway;
 import com.lcmartins.domain.general.Sellable;
 import com.lcmartins.domain.validators.ThrowsErrorValidatorHandler;

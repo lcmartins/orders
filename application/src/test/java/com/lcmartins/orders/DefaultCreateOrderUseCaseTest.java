@@ -30,7 +30,7 @@ import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class DefaultOrderFoodUseCaseTest {
+public class DefaultCreateOrderUseCaseTest {
     @InjectMocks
     private DefaultCreateOrderUseCase<Food> useCase;
 
