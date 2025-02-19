@@ -29,17 +29,16 @@ public class DefaultCreateOrderUseCase<T extends Sellable> extends BaseCreateOrd
     }
 
     public List<OrderItem<T>> fromTransient(List<TransientOrderItem> transientOrderItems, List<T> domainItems) {
-        List<OrderItem<T>> newOrderDomainItems = new ArrayList<>();
-        domainItems.forEach(domainOrderItem -> {
+        List<OrderItem<T>> newItemsToOrder = new ArrayList<>();
+        domainItems.forEach(domainOrderingItem -> {
             Integer quantity = transientOrderItems
                     .stream()
-                    .filter(transientOrderItem -> transientOrderItem.id().equals(domainOrderItem.getId().getValue()))
+                    .filter(transientOrderItem -> transientOrderItem.id().equals(domainOrderingItem.getId().getValue()))
                     .map(TransientOrderItem::quantity)
                     .reduce(0, Integer::sum);
-
-            OrderItem<T> orderItem = new OrderItem<>(domainOrderItem, domainOrderItem.getName(), quantity);
-            newOrderDomainItems.add(orderItem);
+            OrderItem<T> newItemToOrder = new OrderItem<>(domainOrderingItem, quantity);
+            newItemsToOrder.add(newItemToOrder);
         });
-        return newOrderDomainItems;
+        return newItemsToOrder;
     }
 }

@@ -13,12 +13,12 @@ public class OrderItem<T extends Sellable>{
     private final Price total;
     private final Price itemPrice;
 
-    public OrderItem(final T item, final String name, Integer quantity) {
+    public OrderItem(final T item, Integer quantity) {
         Objects.requireNonNull(item.getPrice(), "an item must have a price to be inside an order");
         Objects.requireNonNull(quantity, "an item must have a quantity to be ordered");
         item.validate(new ThrowsErrorValidatorHandler());
         this.item = item;
-        this.name = name;
+        this.name = item.getName();
         this.itemPrice = item.getPrice();
         this.quantity = quantity;
         this.total = Price.withCalc(quantity, item.getPrice().getValue());
