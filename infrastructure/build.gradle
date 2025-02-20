@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath('org.flywaydb:flyway-mysql:11.3.1')
+        classpath('org.flywaydb:flyway-mysql:8.5.10')
     }
 }
 
@@ -12,7 +12,7 @@ plugins {
     id 'application'
     id ('org.springframework.boot') version '3.4.1'
     id('io.spring.dependency-management') version '1.1.7'
-    id('org.flywaydb.flyway') version '11.3.1'
+    id('org.flywaydb.flyway') version '8.5.10'
 }
 
 group = 'com.lcmartins.restaurant.orders'
@@ -45,7 +45,7 @@ dependencies {
 }
 
 flyway {
-    url = System.getenv("DB_HOST") ?: "jdbc:mysql://localhost:3308/orders?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC"
+    url = System.getenv("DB_HOST") ?: "jdbc:mysql://localhost:3308/orders?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true"
     user = System.getenv("DB_USER") ?: 'root'
     password = System.getenv("DB_PASS") ?: 'admin123'
     cleanDisabled = false
