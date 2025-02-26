@@ -1,16 +1,17 @@
 server:
   port: ${PORT:8081}
-
+logging:
+  level:
+    root: debug
 spring:
 
   application:
     name: food
 
   datasource:
-    url: "jdbc:mysql://${DB_HOST:localhost}:3308/orders?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC"
-    username: root
-    password: admin123
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${DB_URL:jdbc:mysql://localhost:3308/orders?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true}
+    username: ${DB_USER:root}
+    password: ${DB_PWD:admin123}
 
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
