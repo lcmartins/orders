@@ -1,0 +1,49 @@
+version: '3.9'
+
+services:
+
+  orders-db:
+    container_name: orders-db
+    image: mysql:9.2.0
+    ports:
+      - "3308:3308"
+    networks:
+      - lcmartins-network
+    environment:
+      TZ: America/Sao_Paulo
+      MYSQL_ROOT_PASSWORD: admin123
+      MYSQL_USER: docker
+      MYSQL_PASSWORD: admin123
+      MYSQL_DATABASE: orders
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_TCP_PORT: 3308
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    healthcheck:
+      test: [ "CMD-SHELL", "mysql -h localhost -P 3308 -u root -p$$MYSQL_ROOT_PASSWORD" ]
+      timeout: 3s
+      retries: 5
+    expose:
+      - 3308
+
+  orders-microservice:
+    container_name: orders-microservice
+    depends_on:
+      orders-db:
+        condition: service_healthy
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: lcmartins/orders-microservice:v1
+    ports:
+      - "8081:8089"
+    networks:
+      - lcmartins-network
+    environment:
+      DB_URL: jdbc:mysql://orders-db:3308/orders?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      DB_USER: docker
+      DB_PWD: admin123
+      PORT: 8089
+
+networks:
+  lcmartins-network:
+    driver: bridge
