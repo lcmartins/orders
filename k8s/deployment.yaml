@@ -1,0 +1,99 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql
+spec:
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+      - name: mysql
+        image: mysql:9.2.0
+        ports:
+        - containerPort: 3308
+        env:
+        - name: TZ
+          value: "America/Sao_Paulo"
+        - name: MYSQL_ROOT_PASSWORD
+          value: "admin123"
+        - name: MYSQL_USER
+          value: "docker"
+        - name: MYSQL_PASSWORD
+          value: "admin123"
+        - name: MYSQL_DATABASE
+          value: "orders"     
+        - name: MYSQL_ROOT_HOST
+          value: "%"
+        - name: MYSQL_TCP_PORT
+          value: "3308"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+spec:
+  selector:
+    app: mysql
+  ports:
+  - port: 3308
+    targetPort: 3308
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orders-svc
+spec:
+  selector:
+    matchLabels:
+      app: orders-svc
+  template:
+    metadata:
+      labels:
+        app: orders-svc
+    spec:
+      containers:
+      - name: orders-svc
+        image: lcmartins/orders-microseervice:v1
+        ports:
+        - containerPort: 8089
+        env:
+        - name: DB_URL
+          valueFrom:
+            secretKeyRef:
+              name: app-secret
+              key: DB_URL
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: app-secret
+              key: DB_USER
+        - name: DB_PWD
+          valueFrom:
+            secretKeyRef: 
+              name: app-secret
+              key: DB_PWD
+        - name: PORT
+          valueFrom:
+            secretKeyRef:
+              name: app-secret
+              key: PORT
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: orders-svc
+spec:
+  selector:
+    app: orders-svc
+  ports:
+  - port: 80
+    targetPort: 8089
+    nodePort: 30000
+    protocol: TCP
+    name: http
+  type: NodePort
